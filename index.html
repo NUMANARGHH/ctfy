@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="CTFY - Temukan asset terbaik untuk video editing, motion graphic, dan konten kreator. Ribuan preset, template, dan efek visual.">
+    <meta name="description" content="CTFY - Asset Pilihan untuk Motion Designer Indonesia. Temukan preset, template, dan resource yang dipakai kreator nyata.">
     <meta name="theme-color" content="#6366f1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     
     <!-- SEO -->
-    <meta property="og:title" content="CTFY | Asset untuk Kreator Konten">
-    <meta property="og:description" content="Temukan asset terbaik untuk edit video, motion graphic, dan konten kreator. Update setiap minggu.">
+    <meta property="og:title" content="CTFY | Asset Pilihan untuk Motion Designer Indonesia">
+    <meta property="og:description" content="Preset, Template & Resource yang Dipakai Kreator Nyata. Alight Motion, CapCut, After Effects.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://ctfy.my.id/og-image.png">
     <meta property="og:url" content="https://ctfy.my.id">
@@ -17,13 +17,33 @@
     <meta property="og:locale" content="id_ID">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="canonical" href="https://ctfy.my.id">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 200'><text y='.9em' font-size='160' font-weight='bold' fill='%236366f1'>CTFY</text></svg>">
     
-    <title>CTFY | Asset untuk Kreator Konten</title>
+    <!-- JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "CTFY",
+        "url": "https://ctfy.my.id",
+        "description": "Asset Pilihan untuk Motion Designer Indonesia",
+        "author": {
+            "@type": "Person",
+            "name": "imctfy"
+        }
+    }
+    </script>
+    
+    <title>CTFY | Asset Pilihan untuk Motion Designer Indonesia</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics-compat.js"></script>
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -93,18 +113,16 @@
             align-items: center;
         }
         
-        .logo h1 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            cursor: pointer;
         }
         
-        .logo p {
-            font-size: 0.65rem;
-            color: var(--text-secondary);
+        .logo svg {
+            height: 38px;
+            width: auto;
         }
         
         .header-actions {
@@ -145,7 +163,7 @@
         .hero p {
             font-size: 1rem;
             color: var(--text-secondary);
-            max-width: 500px;
+            max-width: 550px;
             margin: 0 auto;
         }
         
@@ -217,6 +235,7 @@
             border-bottom: 1px solid var(--border);
             font-size: 0.8rem;
             color: var(--text-secondary);
+            flex-wrap: wrap;
         }
         
         .stat-item {
@@ -225,12 +244,20 @@
             gap: 6px;
         }
         
-        .stat-number {
+        .stat-item .num {
             color: var(--primary);
             font-weight: 600;
         }
         
-        /* Featured Section */
+        .stat-item .sync-status {
+            font-size: 0.6rem;
+            margin-left: 4px;
+        }
+        .sync-status.online { color: var(--success); }
+        .sync-status.offline { color: var(--warning); }
+        .sync-status.local { color: var(--text-secondary); }
+        
+        /* Featured Section - Terbaru */
         .featured-section {
             margin-bottom: var(--spacing-lg);
         }
@@ -275,11 +302,11 @@
         }
         
         .featured-card {
-            flex: 0 0 220px;
+            flex: 0 0 180px;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 16px;
-            overflow: hidden;
+            padding: 16px;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -287,31 +314,6 @@
         .featured-card:hover {
             transform: translateY(-3px);
             border-color: var(--primary);
-        }
-        
-        .featured-image {
-            height: 130px;
-            overflow: hidden;
-            background: var(--bg-hover);
-        }
-        
-        .featured-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .featured-image .placeholder {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            font-size: 2rem;
-            color: var(--text-secondary);
-        }
-        
-        .featured-info {
-            padding: 12px;
         }
         
         .featured-title {
@@ -330,7 +332,7 @@
             gap: 8px;
         }
         
-        /* Grid */
+        /* Grid - Compact Cards WITHOUT Images */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -342,7 +344,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 16px;
-            overflow: hidden;
+            padding: 16px;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -352,59 +354,31 @@
             border-color: var(--primary);
         }
         
-        .card-image {
-            height: 160px;
-            overflow: hidden;
-            background: var(--bg-hover);
-            position: relative;
-        }
-        
-        .card-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s;
-        }
-        
-        .card:hover .card-image img {
-            transform: scale(1.03);
-        }
-        
-        .card-image .placeholder {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            font-size: 2.5rem;
-            color: var(--text-secondary);
-        }
-        
-        .card-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(4px);
-            padding: 3px 8px;
-            border-radius: 100px;
-            font-size: 0.65rem;
-        }
-        
-        .card-content {
-            padding: 14px;
-        }
-        
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
         
-        .category {
+        .card-badge {
             font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 100px;
+            background: rgba(99,102,241,0.15);
             color: var(--primary);
-            font-weight: 500;
+        }
+        
+        .card-badge.pro {
+            background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(99,102,241,0.1));
+            border: 1px solid rgba(139,92,246,0.4);
+            color: #c4b5fd;
+        }
+        
+        .card-badge.free {
+            background: rgba(16,185,129,0.1);
+            border: 1px solid rgba(16,185,129,0.3);
+            color: var(--success);
         }
         
         .favorite-btn {
@@ -422,16 +396,22 @@
         
         .card-title {
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             margin-bottom: 6px;
             line-height: 1.4;
+        }
+        
+        .card-category {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
         }
         
         .tags {
             display: flex;
             flex-wrap: wrap;
             gap: 4px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
         
         .tag {
@@ -444,9 +424,15 @@
         
         .card-meta {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             font-size: 0.65rem;
             color: var(--text-secondary);
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .card-meta .download-count {
+            color: var(--success);
         }
         
         /* Shimmer Skeleton */
@@ -459,6 +445,7 @@
             background-size: 200% 100%;
             animation: shimmer 1.5s infinite;
             border-radius: 16px;
+            height: 180px;
         }
         
         @keyframes shimmer {
@@ -490,7 +477,7 @@
             margin-bottom: var(--spacing-md);
         }
         
-        /* Modal */
+        /* Modal - No Thumbnail */
         .modal {
             display: none;
             position: fixed;
@@ -513,27 +500,10 @@
             padding: var(--spacing-md);
         }
         
-        .modal-preview {
-            height: 200px;
-            border-radius: 12px;
-            overflow: hidden;
-            background: var(--bg-hover);
-            margin-bottom: var(--spacing-md);
-        }
-        
-        .modal-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .modal-preview .placeholder {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
+        .modal-header-icon {
             font-size: 3rem;
-            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: var(--spacing-md);
         }
         
         .modal-detail-row {
@@ -558,6 +528,11 @@
             color: var(--primary);
             text-align: center;
             font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+        
+        .modal-link:hover {
+            background: rgba(99,102,241,0.2);
         }
         
         .share-buttons {
@@ -575,6 +550,13 @@
             text-align: center;
             font-size: 0.8rem;
             color: var(--text);
+            transition: all 0.2s;
+        }
+        
+        .share-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
         }
         
         /* Footer */
@@ -584,6 +566,40 @@
             border-top: 1px solid var(--border);
             color: var(--text-secondary);
             font-size: 0.75rem;
+        }
+        
+        .footer-brand {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 4px;
+        }
+        
+        .footer-tagline {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .footer-social a {
+            color: var(--text-secondary);
+            font-size: 1.3rem;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+        
+        .footer-social a:hover {
+            color: var(--primary);
         }
         
         .footer-links {
@@ -598,27 +614,16 @@
             color: var(--text-secondary);
             text-decoration: none;
             transition: color 0.2s;
+            font-size: 0.75rem;
         }
         
         .footer-links a:hover {
             color: var(--primary);
         }
         
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-sm);
-        }
-        
-        .social-link {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            transition: color 0.2s;
-        }
-        
-        .social-link:hover {
-            color: var(--primary);
+        .footer-copy {
+            font-size: 0.65rem;
+            opacity: 0.5;
         }
         
         /* Toast */
@@ -656,6 +661,7 @@
             .chips-wrapper { justify-content: center; padding-right: 0; }
             .grid { grid-template-columns: 1fr; gap: 12px; }
             .stats-bar { flex-wrap: wrap; gap: 12px; }
+            .logo svg { height: 28px; }
         }
         
         @media (min-width: 769px) and (max-width: 1024px) {
@@ -670,16 +676,6 @@
         @media (prefers-reduced-motion: reduce) {
             * { animation: none !important; transition: none !important; }
         }
-        
-        /* Lazy loading blur */
-        .image-loading {
-            filter: blur(8px);
-            transition: filter 0.3s;
-        }
-        
-        .image-loaded {
-            filter: blur(0);
-        }
     </style>
 </head>
 <body>
@@ -687,10 +683,13 @@
 <header class="header">
     <div class="container">
         <div class="header-inner">
-            <div class="logo">
-                <h1>CTFY</h1>
-                <p>asset untuk kreator</p>
-            </div>
+            <a class="logo" href="/">
+                <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200" preserveAspectRatio="xMidYMid meet">
+                    <g transform="translate(0.000000,200.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="none">
+                        <path d="M1 1823 l0 -178 20 62 c23 74 67 134 134 185 91 69 116 73 420 73 260 0 272 -1 328 -23 81 -33 166 -114 203 -194 l29 -63 3 -287 3 -288 -160 0 -159 0 -4 193 c-3 216 -10 242 -84 307 -51 44 -93 60 -161 60 -100 -1 -175 -46 -219 -132 l-24 -47 0 -493 c0 -476 1 -493 21 -534 74 -153 275 -186 396 -65 61 61 68 87 71 299 l4 192 159 0 160 0 -3 -293 -3 -292 -29 -60 c-38 -76 -105 -143 -181 -181 l-60 -29 -290 0 -290 0 -60 28 c-103 48 -190 151 -214 254 -6 27 -9 -13 -10 -139 l-1 -178 2500 0 2500 0 -1 553 c0 303 -4 541 -8 527 -14 -45 -39 -84 -73 -116 -60 -57 -92 -68 -215 -72 l-113 -4 0 -429 0 -429 -160 0 -160 0 0 429 0 429 -112 4 c-125 4 -168 19 -227 79 -68 67 -66 54 -69 489 l-3 396 23 33 c39 58 72 76 137 76 48 0 64 -5 96 -29 61 -47 65 -67 65 -319 0 -265 7 -302 74 -371 98 -100 254 -98 353 6 57 59 61 82 64 328 1 123 6 242 11 264 11 51 60 103 109 118 74 22 158 -15 189 -85 l20 -42 0 83 0 82 -2500 0 -2500 0 1 -177z m1639 -148 l0 -295 405 0 405 0 0 -135 0 -135 -405 0 -405 0 0 -302 c0 -341 2 -351 80 -422 130 -117 337 -62 396 106 10 29 14 89 14 219 l0 179 161 0 160 0 -3 -307 -3 -308 -28 -53 c-37 -70 -97 -128 -166 -161 l-56 -26 -315 0 -315 0 -49 25 c-77 39 -132 94 -168 168 l-33 67 -3 837 -3 838 166 0 165 0 0 -295z m1798 277 c118 -37 197 -116 234 -234 14 -46 18 -92 18 -199 l0 -139 -164 0 -164 0 -4 64 c-8 126 -98 216 -223 224 -78 5 -120 -8 -174 -54 -76 -65 -85 -96 -89 -281 l-4 -163 411 0 411 0 0 -140 0 -140 -410 0 -410 0 0 -430 0 -430 -160 0 -160 0 0 830 c0 812 0 830 21 884 24 66 96 149 153 178 84 43 110 47 388 47 232 1 274 -1 326 -17z"/>
+                    </g>
+                </svg>
+            </a>
             <div class="header-actions">
                 <button id="themeToggle" class="icon-btn" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
                 <button id="showFavOnlyBtn" class="icon-btn" aria-label="Show favorites"><i class="fas fa-heart"></i></button>
@@ -701,16 +700,16 @@
 
 <main>
     <div class="container">
-        <!-- Hero -->
+        <!-- Hero - satu paragraf -->
         <div class="hero">
-            <h1>Temukan asset terbaik<br>untuk kontenmu</h1>
-            <p>Ribuan preset, template, dan efek visual untuk editor video, motion designer, dan kreator konten.</p>
+            <h1>Asset Pilihan untuk Motion Designer Indonesia</h1>
+            <p>Preset, Template &amp; Asset yang Dipakai Kreator Nyata — Temukan preset atau asset yang kau cari</p>
         </div>
         
         <!-- Search Panel -->
         <div class="search-panel">
             <i class="fas fa-search search-icon"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="Cari asset... Contoh: transition, intro gaming, logo reveal">
+            <input type="text" id="searchInput" class="search-input" placeholder="Cari preset, template, atau asset...">
             <div class="filter-divider"></div>
             <div class="chips-wrapper" id="quickFilters">
                 <button class="chip active" data-filter="all">Semua</button>
@@ -721,21 +720,21 @@
             </div>
         </div>
         
-        <!-- Stats -->
+        <!-- Stats - Hanya Download -->
         <div class="stats-bar">
-            <div class="stat-item"><i class="fas fa-layer-group"></i> <span id="statAssets">0</span> asset</div>
-            <div class="stat-item"><i class="fas fa-tag"></i> <span id="statCategories">0</span> kategori</div>
-            <div class="stat-item"><i class="fas fa-eye"></i> <span id="statViews">0</span> total views</div>
+            <div class="stat-item"><i class="fas fa-layer-group"></i> <span class="num" id="statAssets">0</span> asset</div>
+            <div class="stat-item"><i class="fas fa-tag"></i> <span class="num" id="statCategories">0</span> kategori</div>
+            <div class="stat-item"><i class="fas fa-download"></i> <span class="num" id="statDownloads">0</span> total downloads <span class="sync-status" id="syncStatus">● connecting...</span></div>
         </div>
         
-        <!-- Featured Section -->
+        <!-- Featured Section - Terbaru (Tanpa Thumbnail) -->
         <div class="featured-section" id="featuredSection">
             <div class="section-header">
-                <div class="section-title"><i class="fas fa-fire"></i> Populer Untukmu</div>
-                <span class="section-link" id="refreshTrending"><i class="fas fa-sync-alt"></i> Refresh</span>
+                <div class="section-title"><i class="fas fa-sparkles"></i> Terbaru</div>
+                <span class="section-link" id="refreshFeatured"><i class="fas fa-sync-alt"></i> Refresh</span>
             </div>
             <div class="scroll-container">
-                <div class="card-row" id="trendingRow"></div>
+                <div class="card-row" id="featuredRow"></div>
             </div>
         </div>
         
@@ -749,18 +748,19 @@
 </main>
 
 <footer class="footer">
-    <div class="social-links">
-        <a href="https://tiktok.com/@ctfy" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-        <a href="https://instagram.com/ctfy" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="https://youtube.com/@ctfy" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+    <div class="footer-brand">CTFY</div>
+    <div class="footer-tagline">Preset • Template • Asset — by @imctfy</div>
+    <div class="footer-social">
+        <a href="https://tiktok.com/@imctfy" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="https://instagram.com/imctfy" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://youtube.com/@imctfy" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
     </div>
     <div class="footer-links">
-        <a href="#">Tentang</a>
-        <a href="#">Privasi</a>
-        <a href="#">Kontak</a>
-        <a href="mailto:myxrin2748@gmail.com">myxrin2748@gmail.com</a>
+        <a href="/sitemap.xml">Sitemap</a>
+        <a href="/robots.txt">Robots</a>
+        <a href="mailto:myxrin2748@gmail.com">Kontak</a>
     </div>
-    <div>&copy; 2026 CTFY — Asset untuk kreator</div>
+    <div class="footer-copy">&copy; 2026 CTFY by @imctfy</div>
 </footer>
 
 <div id="modal" class="modal">
@@ -769,7 +769,7 @@
             <h3 id="modalTitle" style="font-size: 1.2rem; font-weight: 600;"></h3>
             <button onclick="closeModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text);">&times;</button>
         </div>
-        <div id="modalPreview" class="modal-preview"></div>
+        <div class="modal-header-icon">📦</div>
         <div id="modalTags" style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px;"></div>
         <div id="modalDetails"></div>
         <div id="modalLinks" class="modal-links"></div>
@@ -781,11 +781,46 @@
 </div>
 
 <script>
+    // ==================== FIREBASE CONFIG ====================
+    const firebaseConfig = {
+        apiKey: "AIzaSyATWmme05sKVI2qCPWvdVP5NFHIQ64eJ-o",
+        authDomain: "pusat-link-cattfly.firebaseapp.com",
+        databaseURL: "https://pusat-link-cattfly-default-rtdb.firebaseio.com",
+        projectId: "pusat-link-cattfly",
+        storageBucket: "pusat-link-cattfly.firebasestorage.app",
+        messagingSenderId: "37808781852",
+        appId: "1:37808781852:web:35e5b9d4f1776065bdbdd9",
+        measurementId: "G-15SJYB7TNN"
+    };
+    
+    let db = null;
+    let firebaseInitialized = false;
+    let downloadSession = new Set();
+    
+    try {
+        const app = firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+        firebaseInitialized = true;
+        console.log('🔥 Firebase connected');
+        updateSyncStatus('● live', 'online');
+    } catch(e) {
+        console.warn('⚠️ Firebase not available:', e);
+        updateSyncStatus('● local', 'local');
+    }
+    
+    function updateSyncStatus(text, type = 'online') {
+        const el = document.getElementById('syncStatus');
+        if(el) { 
+            el.textContent = text; 
+            el.className = 'sync-status ' + type;
+        }
+    }
+    
     // ==================== CONFIG ====================
     const API_URL = 'https://script.google.com/macros/s/AKfycbxGBXI-W9rj6PzpeoSf_84HBq4CQnXwD9CoynIoRIfD9RWWyfArU7qf9R8yl4DTOchs/exec';
-    const CACHE_KEY = 'ctfy_v82_data';
+    const CACHE_KEY = 'ctfy_v85_data';
     const FAVORITES_KEY = 'ctfy_favorites';
-    const VIEWS_KEY = 'ctfy_views';
+    const DOWNLOADS_KEY = 'ctfy_downloads';
     
     let allItems = [], favorites = new Set(), currentItem = null;
     let currentFilter = 'all';
@@ -806,8 +841,7 @@
             return d > weekAgo;
         } catch(e) { return false; }
     }
-    function getViews(id) { let v = JSON.parse(localStorage.getItem(VIEWS_KEY) || '{}'); return v[id] || 0; }
-    function recordView(id) { let v = JSON.parse(localStorage.getItem(VIEWS_KEY) || '{}'); v[id] = (v[id] || 0) + 1; localStorage.setItem(VIEWS_KEY, JSON.stringify(v)); updateStats(); }
+    function getDownloads(id) { let d = JSON.parse(localStorage.getItem(DOWNLOADS_KEY) || '{}'); return d[id] || 0; }
     function showToast(msg) { const t = document.querySelector('.toast'); if(t) t.remove(); const toast = document.createElement('div'); toast.className = 'toast'; toast.innerHTML = msg; document.body.appendChild(toast); setTimeout(() => toast.remove(), 2500); }
     
     // Tags
@@ -831,18 +865,52 @@
         return [...new Set(tags)].slice(0, 4);
     }
     
-    // ==================== IMAGE HELPER ====================
-    function getImageHTML(url, alt, className = '') {
-        if(!url || url === '#' || url.trim() === '') {
-            return `<div class="placeholder${className ? ' ' + className : ''}">📦</div>`;
+    // ==================== FIREBASE SYNC ====================
+    async function syncToFirebase(collection, id, data) {
+        if(!firebaseInitialized || !db) return false;
+        try {
+            await db.collection(collection).doc(id).set(data, { merge: true });
+            return true;
+        } catch(e) {
+            console.warn('Firebase sync error:', e);
+            return false;
         }
-        return `<img src="${escapeHTML(url)}" alt="${escapeHTML(alt || 'Asset')}" loading="lazy" class="${className}" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\\'placeholder\\'>📦</div>'">`;
+    }
+    
+    async function syncDownload(itemId) {
+        const currentDownloads = getDownloads(itemId);
+        await syncToFirebase('assets', itemId, { downloads: currentDownloads, lastDownload: new Date().toISOString() });
+    }
+    
+    async function loadFirebaseDownloads() {
+        if(!firebaseInitialized || !db) return;
+        try {
+            const snapshot = await db.collection('assets').get();
+            let downloads = JSON.parse(localStorage.getItem(DOWNLOADS_KEY) || '{}');
+            let changed = false;
+            
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                if(data.downloads !== undefined && data.downloads > (downloads[doc.id] || 0)) {
+                    downloads[doc.id] = data.downloads;
+                    changed = true;
+                }
+            });
+            
+            if(changed) {
+                localStorage.setItem(DOWNLOADS_KEY, JSON.stringify(downloads));
+            }
+            updateSyncStatus('● live', 'online');
+        } catch(e) {
+            console.warn('Failed to load Firebase downloads:', e);
+            updateSyncStatus('● offline', 'offline');
+        }
     }
     
     // ==================== FAVORITES ====================
     function loadFavorites() { try { const s = localStorage.getItem(FAVORITES_KEY); if(s) favorites = new Set(JSON.parse(s)); } catch(e) {} renderAll(); updateFavUI(); }
     function saveFavorites() { localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favorites])); }
-    function toggleFavorite(id, e) { e.stopPropagation(); favorites.has(id) ? favorites.delete(id) : favorites.add(id); saveFavorites(); renderAll(); showToast(favorites.has(id) ? 'Ditambahkan ke favorit' : 'Dihapus dari favorit'); }
+    function toggleFavorite(id, e) { e.stopPropagation(); favorites.has(id) ? favorites.delete(id) : favorites.add(id); saveFavorites(); renderAll(); showToast(favorites.has(id) ? '❤️ Ditambahkan ke favorit' : '💔 Dihapus dari favorit'); }
     function isFavorite(id) { return favorites.has(id); }
     function updateFavUI() { const btn = document.getElementById('showFavOnlyBtn'); if(btn) btn.style.color = currentFilter === 'fav' ? 'var(--primary)' : 'var(--text-secondary)'; }
     
@@ -863,16 +931,19 @@
     
     // ==================== RENDER ====================
     function renderFeatured() {
-        let trending = [...allItems].sort((a,b) => getViews(b.Kode) - getViews(a.Kode)).slice(0, 8);
-        if(trending.every(i => getViews(i.Kode) === 0)) trending = [...allItems].slice(0, 8);
-        document.getElementById('trendingRow').innerHTML = trending.map(item => `
+        let featured = [...allItems];
+        featured.sort((a,b) => {
+            if(a.DateAdded && b.DateAdded) return new Date(b.DateAdded) - new Date(a.DateAdded);
+            return 0;
+        });
+        featured = featured.slice(0, 8);
+        
+        document.getElementById('featuredRow').innerHTML = featured.map(item => `
             <div class="featured-card" onclick="openModalByCode('${escapeHTML(item.Kode)}')">
-                <div class="featured-image">
-                    ${item.Thumbnail ? `<img src="${escapeHTML(item.Thumbnail)}" alt="${escapeHTML(item.Nama)}" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\\'placeholder\\'>🎬</div>'">` : '<div class="placeholder">🎬</div>'}
-                </div>
-                <div class="featured-info">
-                    <div class="featured-title">${escapeHTML(item.Nama || 'Untitled')}</div>
-                    <div class="featured-meta"><span>👁️ ${getViews(item.Kode)}</span><span>${isProItem(item) ? 'Pro' : 'Gratis'}</span></div>
+                <div class="featured-title">${escapeHTML(item.Nama || 'Untitled')}</div>
+                <div class="featured-meta">
+                    <span>${isProItem(item) ? '⭐ Pro' : '🎁 Gratis'}</span>
+                    <span>⬇️ ${getDownloads(item.Kode)}</span>
                 </div>
             </div>
         `).join('');
@@ -886,18 +957,16 @@
         }
         grid.innerHTML = items.map(item => `
             <div class="card" onclick="openModalByCode('${escapeHTML(item.Kode)}')">
-                <div class="card-image">
-                    ${item.Thumbnail ? `<img src="${escapeHTML(item.Thumbnail)}" alt="${escapeHTML(item.Nama)}" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\\'placeholder\\'>📦</div>'">` : '<div class="placeholder">📦</div>'}
-                    <div class="card-badge">${isProItem(item) ? '⭐ Pro' : '🎁 Gratis'}</div>
+                <div class="card-header">
+                    <span class="card-badge ${isProItem(item) ? 'pro' : 'free'}">${isProItem(item) ? '⭐ Pro' : '🎁 Gratis'}</span>
+                    <button class="favorite-btn ${isFavorite(item.Kode) ? 'active' : ''}" onclick="event.stopPropagation();toggleFavorite('${escapeHTML(item.Kode)}',event)"><i class="${isFavorite(item.Kode) ? 'fas' : 'far'} fa-star"></i></button>
                 </div>
-                <div class="card-content">
-                    <div class="card-header">
-                        <span class="category">${escapeHTML(item.Kategori || 'Umum')}</span>
-                        <button class="favorite-btn ${isFavorite(item.Kode) ? 'active' : ''}" onclick="event.stopPropagation();toggleFavorite('${escapeHTML(item.Kode)}',event)"><i class="${isFavorite(item.Kode) ? 'fas' : 'far'} fa-star"></i></button>
-                    </div>
-                    <div class="card-title">${escapeHTML(item.Nama || 'Untitled')}</div>
-                    <div class="tags">${getTags(item).map(t => `<span class="tag">#${t}</span>`).join('')}</div>
-                    <div class="card-meta"><span>👁️ ${getViews(item.Kode)}</span><span>${item.FileSize || '~12 MB'}</span></div>
+                <div class="card-title">${escapeHTML(item.Nama || 'Untitled')}</div>
+                <div class="card-category">${escapeHTML(item.Kategori || 'Umum')}</div>
+                <div class="tags">${getTags(item).map(t => `<span class="tag">#${t}</span>`).join('')}</div>
+                <div class="card-meta">
+                    <span class="download-count">⬇️ ${getDownloads(item.Kode)} downloads</span>
+                    <span>${item.FileSize || '~12 MB'}</span>
                 </div>
             </div>
         `).join('');
@@ -938,10 +1007,10 @@
     
     function updateStats() {
         let cats = new Set(allItems.map(i => i.Kategori || 'Umum'));
-        let totalViews = Object.values(JSON.parse(localStorage.getItem(VIEWS_KEY) || '{}')).reduce((a,b) => a + b, 0);
+        let totalDownloads = Object.values(JSON.parse(localStorage.getItem(DOWNLOADS_KEY) || '{}')).reduce((a,b) => a + b, 0);
         document.getElementById('statAssets').innerText = allItems.length;
         document.getElementById('statCategories').innerText = cats.size;
-        document.getElementById('statViews').innerText = totalViews.toLocaleString();
+        document.getElementById('statDownloads').innerText = totalDownloads.toLocaleString();
     }
     
     function resetFilters() {
@@ -955,24 +1024,15 @@
     function openModal(item) {
         if(!item) return;
         currentItem = item;
-        recordView(item.Kode);
         
         document.getElementById('modalTitle').innerText = item.Nama || 'Detail Asset';
-        
-        // Preview with thumbnail
-        const previewEl = document.getElementById('modalPreview');
-        if(item.Thumbnail && item.Thumbnail !== '#') {
-            previewEl.innerHTML = `<img src="${escapeHTML(item.Thumbnail)}" alt="${escapeHTML(item.Nama)}" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\\'placeholder\\'>🎬</div>'">`;
-        } else {
-            previewEl.innerHTML = '<div class="placeholder">🎬</div>';
-        }
         
         document.getElementById('modalTags').innerHTML = getTags(item).map(t => `<span class="tag">#${t}</span>`).join('');
         document.getElementById('modalDetails').innerHTML = `
             <div class="modal-detail-row"><span>Kategori</span><span>${escapeHTML(item.Kategori || 'Umum')}</span></div>
             <div class="modal-detail-row"><span>Tipe</span><span>${isProItem(item) ? '⭐ Pro (Premium)' : '🎁 Gratis'}</span></div>
             <div class="modal-detail-row"><span>Ukuran</span><span>${item.FileSize || '12 MB'}</span></div>
-            <div class="modal-detail-row"><span>Views</span><span>${getViews(item.Kode)} kali</span></div>
+            <div class="modal-detail-row"><span>Downloads</span><span>⬇️ ${getDownloads(item.Kode)}</span></div>
             <div class="modal-detail-row"><span>Update</span><span>${item.DateAdded ? new Date(item.DateAdded).toLocaleDateString('id') : '-'}</span></div>
         `;
         
@@ -980,19 +1040,20 @@
         if(item.Link5MB && item.Link5MB !== '#') links.push({ label: '📦 Download 5MB', url: item.Link5MB });
         if(item.LinkDrive && item.LinkDrive !== '#') links.push({ label: '📁 Download Drive', url: item.LinkDrive });
         if(item.LinkAsset && item.LinkAsset !== '#') links.push({ label: '📎 Link Asset', url: item.LinkAsset });
+        
         document.getElementById('modalLinks').innerHTML = links.length ? 
-            links.map(l => `<a href="${l.url}" target="_blank" rel="noopener noreferrer" class="modal-link">${l.label}</a>`).join('') : 
+            links.map(l => `<a href="${l.url}" target="_blank" rel="noopener noreferrer" class="modal-link" onclick="trackDownload('${escapeHTML(item.Kode)}')">${l.label}</a>`).join('') : 
             '<div style="text-align:center;padding:20px;">Link akan segera tersedia</div>';
         
         document.getElementById('modal').style.display = 'flex';
         document.body.style.overflow = 'hidden';
         
-        // Use replaceState to avoid history spam
         let url = new URL(window.location);
         url.searchParams.set('code', item.Kode);
         window.history.replaceState({}, '', url);
         
         renderFeatured();
+        updateStats();
     }
     
     function openModalByCode(code) { 
@@ -1018,10 +1079,14 @@
         window.history.replaceState({}, '', url);
     }
     
+    document.getElementById('modal').addEventListener('click', function(e) {
+        if(e.target === this) closeModal();
+    });
+    
     function copyAssetLink() { 
         if(currentItem) { 
             let url = `${window.location.origin}${window.location.pathname}?code=${currentItem.Kode}`;
-            navigator.clipboard.writeText(url).then(() => showToast('Link disalin!')).catch(() => {});
+            navigator.clipboard.writeText(url).then(() => showToast('📋 Link disalin!')).catch(() => {});
         } 
     }
     
@@ -1034,12 +1099,26 @@
         } else copyAssetLink(); 
     }
     
+    // ==================== TRACK DOWNLOAD ====================
+    function trackDownload(id) {
+        const sessionKey = 'download_' + id;
+        if(downloadSession.has(sessionKey)) return;
+        downloadSession.add(sessionKey);
+        
+        let downloads = JSON.parse(localStorage.getItem(DOWNLOADS_KEY) || '{}');
+        downloads[id] = (downloads[id] || 0) + 1;
+        localStorage.setItem(DOWNLOADS_KEY, JSON.stringify(downloads));
+        syncDownload(id);
+        renderAll();
+        showToast('⬇️ Download dicatat!');
+    }
+    
     // ==================== LOAD DATA ====================
     function showSkeleton() {
         const grid = document.getElementById('cardGrid');
         let skeletons = '';
         for(let i = 0; i < 8; i++) {
-            skeletons += `<div class="shimmer" style="height:280px;"></div>`;
+            skeletons += `<div class="shimmer"></div>`;
         }
         grid.innerHTML = skeletons;
     }
@@ -1048,6 +1127,8 @@
         if(isLoading) return;
         isLoading = true;
         showSkeleton();
+        
+        await loadFirebaseDownloads();
         
         const cached = localStorage.getItem(CACHE_KEY);
         if(cached) {
@@ -1075,7 +1156,7 @@
             initFuse();
             renderAll();
             openAssetFromURL();
-            showToast(`${allItems.length} asset dimuat`);
+            showToast(`✅ ${allItems.length} asset dimuat`);
         } catch(err) {
             document.getElementById('cardGrid').innerHTML = `<div class="empty-state"><i class="fas fa-wifi"></i><h3>Gagal memuat data</h3><p>Periksa koneksi internetmu</p><button class="chip" onclick="loadData()">Coba lagi</button></div>`;
         }
@@ -1111,20 +1192,18 @@
     function initEvents() {
         const searchInput = document.getElementById('searchInput');
         const resetBtn = document.getElementById('resetFiltersBtn');
-        const refreshBtn = document.getElementById('refreshTrending');
+        const refreshBtn = document.getElementById('refreshFeatured');
         const favChip = document.getElementById('favFilterChip');
         const showFavBtn = document.getElementById('showFavOnlyBtn');
         
-        // Debounced search
         searchInput.addEventListener('input', () => {
             clearTimeout(searchTimer);
             searchTimer = setTimeout(() => applyFilters(), 250);
         });
         
         resetBtn.addEventListener('click', resetFilters);
-        refreshBtn.addEventListener('click', () => { renderFeatured(); showToast('Populer diperbarui'); });
+        refreshBtn.addEventListener('click', () => { renderFeatured(); showToast('🔄 Terbaru diperbarui'); });
         
-        // Favorites toggle
         function toggleFavFilter() {
             currentFilter = currentFilter === 'fav' ? 'all' : 'fav';
             applyFilters();
@@ -1132,7 +1211,6 @@
         favChip.addEventListener('click', toggleFavFilter);
         showFavBtn.addEventListener('click', toggleFavFilter);
         
-        // Filter chips
         document.querySelectorAll('.chip[data-filter]').forEach(chip => {
             chip.addEventListener('click', () => { 
                 if(chip.dataset.filter === 'all' && currentFilter === 'all') return;
@@ -1141,7 +1219,6 @@
             });
         });
         
-        // Popstate for back/forward
         window.addEventListener('popstate', () => {
             let params = new URLSearchParams(window.location.search);
             let code = params.get('code');
@@ -1149,7 +1226,6 @@
             else closeModal();
         });
         
-        // Escape key
         document.addEventListener('keydown', (e) => {
             if(e.key === 'Escape') closeModal();
             if(e.key === '/' && document.activeElement !== searchInput) {
@@ -1166,6 +1242,7 @@
     window.copyAssetLink = copyAssetLink;
     window.shareAsset = shareAsset;
     window.resetFilters = resetFilters;
+    window.trackDownload = trackDownload;
     
     initTheme();
     loadFavorites();
